@@ -46,7 +46,7 @@ For the most part, Data Engineering design efficient ways to store data, running
 
 ### Section 2 - Data Modeling
 
-#### Lection 1 - Introduction to Data Modeling
+#### Lesson 1 - Introduction to Data Modeling
 
 > In this lesson, students will learn the basic difference between relational and non-relation databases, and how each type of database fits the diverse needs of data consumers. 
 
@@ -82,7 +82,7 @@ We focus on the physical data model to create Data Definition Languages (DDL's) 
 
 **Relational Model**
 
-The software system used to maintain relational databases is a relational database management system or **RBBMS**. Invented by IBM in the late 60s.
+The software system used to maintain relational databases is a relational database management system or **RDBMS**. Invented by IBM in the late 60s.
 Structured Query Language or **SQL** is the language used across almost all relational database systems for querying and maintaining the database.
 Examples: Oracle, Teradata, MySql, PostgreSQL, Sqlite.
 
@@ -90,7 +90,7 @@ A **Schema** is a collection of tables. **Tables/Relation** is a group of rows s
 
 ![](./images/6.png)
 
-**When to use a relational database**
+**When to Use a Relational Database**
 
 - Ease of use -- SQL
 - Ability to do JOINS
@@ -126,8 +126,66 @@ A **Schema** is a collection of tables. **Tables/Relation** is a group of rows s
 **High Availability** - describes a database where there is very little **downtime** of the system, it is always **on** and **functioning**.
 **Horizontal Scalability** - ability to add more nodes/servers to the system to increase performance.
 
-**What is PostgreSQL?**
+**What is PostgreSQL**
 
 - Open source object-relational database system
 - Uses and builds on SQL language
 - Refer to `Lesson 1 Demo 0`, `Lesson 1 Demo 1`, `Lesson 1 Exercise 1`.
+
+**NoSQL Databases**
+
+> "... has a simpler design, simpler horizontal scaling, and finer control of availability. Data structures used are different than those in Relational Databases nd they make some operations faster.
+
+- NoSQL and NonRelational are interchangeable.
+- Also invented in the late 70s but became more popular in the 2000s as data sizes became bigger and less downtimes became acceptable. It was built to solve the limitations of the Relational DBs.
+- Apache Cassandra (Partition Row Store) | MongoDB (Document Store) | DynamoDB (Key-Value Store) | Apache HBase (Wide Column Store) | Neo4J (Graph Database)
+- Specific to Apache Cassandra: `Keyspace` (collection of tables), `Table` (Group of partitions) and `Rows` (single item).
+
+![](./images/7.png)
+
+**Apache Cassandra**
+
+> "... provides scalability and high availability without compromising performance. Linear Scalability and proven fault-tolerance on commodity hardware or cloud infrastructure make it perfect platform for mission-critical data."
+
+- Uses its own query language CQL.
+
+What type of companies use Apache Cassandra?
+
+All kinds of companies. For example, Uber uses Apache Cassandra for their entire backend. Netflix uses Apache Cassandra to serve all their videos to customers. Good use cases for NoSQL (and more specifically Apache Cassandra) are:
+
+- Transaction logging (retail, health care)
+- Internet of Things (IoT)
+- Time series data
+- Any workload that is heavy on writes to the database (since Apache Cassandra is optimized for writes).
+
+Would Apache Cassandra be a hindrance for my analytics work? If yes, why?
+
+Yes, if you are trying to do analysis, such as using `GROUP BY` statements. Since Apache Cassandra requires data modeling based on the query you want, you can't do ad-hoc queries. However you can add clustering columns into your data model and create new tables.
+
+**When to use a NoSQL Database**
+
+- Need to be able to store different data type formats: NoSQL was also created to handle different data configurations: structured, semi-structured, and unstructured data. JSON, XML documents can all be handled easily with NoSQL.
+- Large amounts of data: Relational Databases are not distributed databases and because of this they can only scale vertically by adding more storage in the machine itself. NoSQL databases were created to be able to be horizontally scalable. The more servers/systems you add to the database the more data that can be hosted with high availability and low latency (fast reads and writes).
+- Need horizontal scalability: Horizontal scalability is the ability to add more machines or nodes to a system to increase performance and space for data
+- Need high throughput: While ACID transactions bring benefits they also slow down the process of reading and writing data. If you need very fast reads and writes using a relational database may not suit your needs.
+- Need a flexible schema: Flexible schema can allow for columns to be added that do not have to be used by every row, saving disk space.
+- Need high availability: Relational databases have a single point of failure. When that database goes down, a failover to a backup system must happen and takes time.
+
+So bottom line: built for Big Data and to provide users with low latency.
+
+**When NOT to use a NoSQL Database**
+
+- When you have a small dataset: NoSQL databases were made for big datasets not small datasets and while it works it wasn’t created for that.
+- When you need ACID Transactions: If you need a consistent database with ACID transactions, then most NoSQL databases will not be able to serve this need. NoSQL database are eventually consistent and do not provide ACID transactions. However, there are exceptions to it. Some non-relational databases like MongoDB can support ACID transactions.
+- When you need the ability to do JOINS across tables: NoSQL does not allow the ability to do JOINS. This is not allowed as this will result in full table scans.
+- If you want to be able to do aggregations and analytics.
+- If you have changing business requirements: Ad-hoc queries are possible but difficult as the data model was done to fix particular queries.
+- If your queries are not available and you need the flexibility: You need your queries in advance. If those are not available or you will need to be able to have flexibility on how you query your data you might need to stick with a relational database.
+
+*Caveats to NoSQL and ACID Transactions*
+There are some NoSQL databases that offer some form of ACID transaction. As of v4.0, MongoDB added multi-document ACID transactions within a single replica set. With their later version, v4.2, they have added multi-document ACID transactions in a shared/partitioned deployment.
+
+> NoSQL databases and Relational databases do not replace each other for all tasks. Both do different tasks extremely well, and should be utilized for the use cases they fit best.
+
+- Does not allow for duplicates as opposed to PostgreSQL.
+- Refer to `Lesson 1 Demo 2` and `Lesson 1 Exercise 2`.
