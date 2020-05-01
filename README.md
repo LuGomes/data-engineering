@@ -189,3 +189,73 @@ There are some NoSQL databases that offer some form of ACID transaction. As of v
 
 - Does not allow for duplicates as opposed to PostgreSQL.
 - Refer to `Lesson 1 Demo 2` and `Lesson 1 Exercise 2`.
+
+#### Lesson 2 - Relational Data Models
+
+> Students will learn the fundamentals of how to do relational data modeling by focusing on normalization, denormalization, fact/dimension tables, and different schema models.
+
+Definitions:
+
+- Database: set of related data and the way it is organized.
+- DBMS: computer system that allows users to interact with the databases and provides access to all of the data. Because of the close relationship, the term database is often used to refer to both the database and the DBMS used.
+
+*Rule 1: The information rule*
+All information in a relational database is represented explicitly at the logical level and in exactly one way – by values in tables.
+
+- **Online Analytical Processing (OLAP)**
+Databases optimized for these workloads allow for complex analytical and ad hoc queries, including aggregations. These type of databases are optimized for reads.
+
+- **Online Transactional Processing (OLTP)**
+Databases optimized for these workloads allow for less complex queries in large volume. The types of queries for these databases are read, insert, update, and delete.
+
+The key to remember the difference between OLAP and OLTP is analytics (A) vs transactions (T). If you want to get the price of a shoe then you are using OLTP (this has very little or no aggregations). If you want to know the total stock of shoes a particular store sold, then this requires using OLAP (since this will require aggregations).
+
+Structuring the database:
+- **Normalization**: To reduce redundancy and increase data integrity. The process of structuring a relational database in accordance with a series of normal forms in order to reduce data redundancy and increase data integrity. We want fewer copies and that our records are the single source of truth. The table below is not normalized.
+
+- **Denormalization**: Must be done in read heavy workloads ato increase performance.
+
+![](./images/8.png)
+
+Objectives of **Normal Form**:
+- To free the database from unwanted insertions, updates, and deletion dependencies. The fewer places you need to update the data, less prone to error you are...
+- To reduce the need for refactoring the database as new types of data are introduced.
+- To make the relational model more informative to users.
+- To make the database neutral to the query statistics.
+
+**Normal Forms**
+
+- Normalization is a step by step process. There are more than three but not really done in production, more for academics.
+
+**How to reach First Normal Form (1NF)**
+
+- Atomic values: each cell contains unique and single values
+- Be able to add data without altering tables (adding or removing columns)
+- Separate different relations into different tables
+- Keep relationships between tables together with foreign keys
+
+**Second Normal Form (2NF)**
+
+- Have reached 1NF
+- All columns in the table must rely on the Primary Key
+
+In the example below, the store ID is not unique and so we need two columns to get a unique record. So we break the bigger table down into two smaller ones.
+
+![](./images/9.png)
+
+**Third Normal Form (3NF)**
+
+- Must be in 2nd Normal Form
+- No transitive dependencies
+- Remember, transitive dependencies you are trying to maintain is that to get from A-> C, you want to avoid going through B.
+
+![](./images/10.png)
+![](./images/11.png)
+
+In the first table, we need to know `music award` + `year` to identify one `winner record of year`. And then the `lead singer` is extra info. Jon Lennon is repeated in rows 1 and 3. Then if that was updated, we would need to update in multiple locations...
+
+**When to use 3NF**
+
+When you want to update data, we want to be able to do in just 1 place. 
+
+- Refer to `Lesson 2 Demo 1` and `Lesson 2 Exercise 1`.
