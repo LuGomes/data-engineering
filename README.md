@@ -259,3 +259,100 @@ In the first table, we need to know `music award` + `year` to identify one `winn
 When you want to update data, we want to be able to do in just 1 place. 
 
 - Refer to `Lesson 2 Demo 1` and `Lesson 2 Exercise 1`.
+
+**Denormalization**
+
+> The process of trying to improve the read performance of a database at the expense of losing some write performance by adding redundant copies of data.
+
+JOINS on the database allow for outstanding flexibility but are extremely slow. If you are dealing with heavy reads on your database, you may want to think about denormalizing your tables. You get your data into normalized form, and then you proceed with denormalization. So, denormalization comes after normalization.
+
+Requires more space in the system but now space is not really a limiting factor. Denormalization is part of the data modeling process to make data more easily queried. We want to think about the queries that we are running and how we can reduce our number of JOINS even if that means duplicating data. 
+
+Logical Design Change:
+- The designer is in charge of keeping the data consistent (all copies are consistent at any time)
+- Reads will be fast (select)
+- Writes will be slower (insert, update, delete)
+
+![](./images/12.png)
+
+In summary:
+
+- Normalization is about trying to increase data integrity by reducing the number of copies of the data. Data that needs to be added or updated will be done in as few places as possible.
+
+- Denormalization is trying to increase performance by reducing the number of joins between tables (as joins can be slow). Data integrity will take a bit of a potential hit, as there will be more copies of the data (to reduce JOINS).
+
+- Refer to `Lesson 2 Demo 2` and `Lesson 2 Exercise 2`.
+
+Example of Denormalized Data:
+As you saw in the earlier demo, this denormalized table contains a column with the Artist name that includes duplicated rows, and another column with a list of songs.
+
+![](./images/13.png)
+
+Example of Normalized Data:
+Now for normalized data, Amanda used 3NF. You see a few changes:
+1) No row contains a list of items. For e.g., the list of song has been replaced with each song having its own row in the Song table.
+2) Transitive dependencies have been removed. For e.g., album ID is the PRIMARY KEY for the album year in Album Table. Similarly, each of the other tables have a unique primary key that can identify the other values in the table (e.g., song id and song name within Song table).
+
+![](./images/14.png)
+![](./images/15.png)
+
+**Fact and Dimension Tables**
+
+- Work together to create an organized data model
+- While fact and dimension are not created differently in the DDL, they are conceptual and extremely important for the organization.
+- One or more fact table(s) for each dimension table.
+- Fact tables consist of the measurements, metrics or facts of a business process. Not meant to be updated in place like a dimension table would. Normally have numbers. 
+- Dimension is a structure that categorizes facts and measures in order to enable users to answer business questions. Dimensions are people, products, place and time. Include textual and numerical information not used for analysis. 
+
+Two of the most popular data mart schema for data warehouses are:
+- **Star Schema**
+- **Snowflake Schema**
+
+**Star Schema** is the simplest style of data mart schema. The start schema consists of one or more fact tables referencing any number of dimension tables.
+
+In this example, it helps to think about the Dimension tables providing the following information:
+
+Where the product was bought? (Dim_Store table)
+When the product was bought? (Dim_Date table)
+What product was bought? (Dim_Product table)
+
+The Fact table provides the metric of the business process (here Sales).
+
+How many units of products were bought? (Fact_Sales table)
+![](./images/16.png)
+
+Why "star" schema?
+- Gets its name from the physical model resembling a star shape
+- a fact table is at its center
+- dimension table surrounds the fact table representing the star's points.
+
+Benefits of star schema:
+- Denormalized
+- Simplifies queries
+- Fast aggregations
+
+Disadvantages:
+- Issues that come with denormalization 
+- Data integrity
+- Decrease query flexibility
+- Many to many relationships -- simplified
+
+![](./images/17.png)
+
+**Snowflake Schema** is a logical arrangement of tables in a multidimensional database represented by centralized fact tables which are connected to multiple dimensions. A complex snowflake shape emerges when the dimensions of a snowflake schema are elaborated, having multiple levels of relationships, child tables having multiple parents.
+
+![](./images/18.png)
+
+The star schema is a simplified case of the snowflake schema. The star schema does no allow for one to many relationships while the snowflake schema does. The snowflake schema is more normalized that the star schema, but only in 1NF or 2NF.
+
+![](./images/19.png)
+
+[Medium post on the differences between Star and Snowflake Schemas](https://medium.com/@BluePi_In/deep-diving-in-the-world-of-data-warehousing-78c0d52f49a)
+
+- Refer to `LEsson 2 Demo 3` and `Lesson 2 Exercise 3`.
+
+![](./images/20.png)
+![](./images/21.png)
+![](./images/22.png)
+![](./images/23.png)
+![](./images/24.png)
