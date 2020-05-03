@@ -349,10 +349,12 @@ The star schema is a simplified case of the snowflake schema. The star schema do
 
 [Medium post on the differences between Star and Snowflake Schemas](https://medium.com/@BluePi_In/deep-diving-in-the-world-of-data-warehousing-78c0d52f49a)
 
-- Refer to `LEsson 2 Demo 3` and `Lesson 2 Exercise 3`.
+- Refer to `Lesson 2 Demo 3` and `Lesson 2 Exercise 3`.
 
 ![](./images/20.png)
 ![](./images/21.png)
 ![](./images/22.png)
 ![](./images/23.png)
 ![](./images/24.png)
+
+- Refer to `Project 1`.
