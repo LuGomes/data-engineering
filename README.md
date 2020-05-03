@@ -358,3 +358,65 @@ The star schema is a simplified case of the snowflake schema. The star schema do
 ![](./images/24.png)
 
 - Refer to `Project 1`.
+
+
+#### Lesson 4 - NoSQL Data Models
+
+> Students will learn the fundamentals of data modeling or NoSQL databases, focusing on the basics of NoSQL database design, denormalization, primary keys, clustering columns, and the WHERE clause.
+
+- NoSQL and Non-Relational are interchangeable terms
+- NoSQL = Not only SQL
+
+**When Not to Use SQL**
+
+- Need high Availability in the data: Indicates the system is always up and there is no downtime
+- Have Large Amounts of Data
+- Need Linear Scalability: The need to add more nodes to the system so performance will increase linearly
+- Low Latency: Shorter delay before the data is transferred once the instruction for the transfer has been received.
+- Need fast reads and writes
+- Apache Cassandra is an example of a NoSQL database
+
+Here is a helpful blog that describes the different types of NoSQL databases - <https://www.xenonstack.com/blog/nosql-databases/>.
+
+**Apache Cassandra**
+- Open source
+- Masterless architecture
+- High availability - no single point of failure
+- Linearly scalable
+- Used by Uber, Netflix, Twitter, Facebook...
+- Created to handle big data challenges that relational databases failed to tackle
+
+In a distributed database, in order to have high availability you will need copies of your data. It is made up of multiple machines (horizontally scaled). Since there are copies of data to cope with eventual nodes crashing, data might not be up-to-date in all nodes - **eventual consistency**.
+
+**Eventual Consistency:**
+Over time (if no new changes are made) each copy of the data will be the same, but if there are new changes, the data may be different in different locations. The data may be inconsistent for only milliseconds. There are workarounds in place to prevent getting stale data. Or, in other words, a consistency model used in distributed computing to achieve high availability at informally guarantees that, f no new updates are made to a given data item, eventually all accesses to that item will return the last updated value.
+
+**CAP Theorem:**
+> It is impossible for a distributed data store to simultaneously provide more than two out of three guarantees of consistency, availability and partition tolerance.
+
+**Consistency**: Every read from the database gets the latest (and correct) piece of data or an error
+
+**Availability**: Every request is received and a response is given -- without a guarantee that the data is the latest update
+
+**Partition Tolerance**: The system continues to work regardless of losing network connectivity between nodes
+
+![](./images/25.png)
+
+When there is no network failures, it is possible to achieve consistency and availability. However, if there is a network failure, you may only have consistency or availability. Apache Cassandra chooses to be highly available at the potential cost of consistency! It is a `AP` type of database.
+
+***Commonly Asked Questions:***
+- Is Eventual Consistency the opposite of what is promised by SQL database per the ACID principle?
+
+Much has been written about how Consistency is interpreted in the ACID principle and the CAP theorem. Consistency in the ACID principle refers to the requirement that only transactions that abide by constraints and database rules are written into the database, otherwise the database keeps previous state. In other words, the data should be correct across all rows and tables. However, consistency in the CAP theorem refers to every read from the database getting the latest piece of data or an error.
+
+- Which of these combinations is desirable for a production system - Consistency and Availability, Consistency and Partition Tolerance, or Availability and Partition Tolerance?
+
+As the CAP Theorem Wikipedia entry says, "The CAP theorem implies that in the presence of a network partition, one has to choose between consistency and availability." So there is no such thing as Consistency and Availability in a distributed database since it must always tolerate network issues. You can only have Consistency and Partition Tolerance (CP) or Availability and Partition Tolerance (AP). Remember, relational and non-relational databases do different things, and that's why most companies have both types of database systems.
+
+- Does Cassandra meet just Availability and Partition Tolerance in the CAP theorem?
+
+According to the CAP theorem, a database can actually only guarantee two out of the three in CAP. So supporting Availability and Partition Tolerance makes sense, since Availability and Partition Tolerance are the biggest requirements.
+
+- If Apache Cassandra is not built for consistency, won't the analytics pipeline break?
+
+If I am trying to do analysis, such as determining a trend over time, e.g., how many friends does John have on Twitter, and if you have one less person counted because of "eventual consistency" (the data may not be up-to-date in all locations), that's OK. In theory, that can be an issue but only if you are not constantly updating. If the pipeline pulls data from one node and it has not been updated, then you won't get it. Remember, in Apache Cassandra it is about Eventual Consistency.
