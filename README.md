@@ -488,3 +488,46 @@ You can use as many clustering columns as you would like. You cannot use the clu
 The WHERE statement is allowing us to do the fast reads. With Apache Cassandra, we are talking about big data -- think terabytes of data -- so we are making it fast for read purposes. Data is spread across all the nodes. By using the WHERE statement, we know which node to go to, from which node to get that data and serve it back. For example, imagine we have 10 years of data on 10 nodes or servers. So 1 year's data is on a separate node. By using the WHERE year = 1 statement we know which node to visit fast to pull the data from.
 
 - Refer to `Lesson 3 Demo 4` and `Lesson 3 Exercise 4`.
+
+
+### Section 3 - Cloud Data Warehouses
+
+#### Lesson 1 - Intro to Data Warehouses
+
+> Students will be able to understand the purpose, architecture, and technologies used in a data warehouse.
+
+What is a Data Warehouse?
+
+- In a Business perspective:
+![](./images/32.png)
+![](./images/33.png)
+![](./images/34.png)
+![](./images/35.png)
+![](./images/36.png)
+![](./images/37.png)
+
+- In a Technical perspective:
+
+> A copy of transaction data specifically structured for query and analysis.
+
+> Is a subject-oriented, integrated, nonvolatile, and time-variant collection of data in support of management's decisions.
+
+> Is a system that retrieves and consolidates data periodically from the source systems into a dimensional and normalized data stores. It usually kee[s years of history and is queried for business intelligence or other analytical activities. It is typically updated in batches, not every time a transaction happens in the source system.
+
+![](./images/38.png)
+![](./images/39.png)
+![](./images/40.png)
+
+**Data Warehouse Goals**
+- Simple to understand
+- Performant
+- Quality assured
+- Handles new questions well
+- Secure
+
+![](./images/41.png)
+![](./images/42.png)
+![](./images/43.png)
+![](./images/44.png)
+
+- Refer to `Lesson 4 Exercise 1`.
