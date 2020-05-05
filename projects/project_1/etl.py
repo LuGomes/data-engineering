@@ -6,6 +6,12 @@ from sql_queries import *
 
 
 def process_song_file(cur, filepath):
+    """Extract data contained in a given file and load it into Postgres tables songs and artists.
+
+    Arguments:
+        cur {psycopg2.connection.cursor class}: A cursor to execute PostgreSQL commands during the lifetime of the connection
+        filepath {string}: The path to the file containing data to process     
+    """
     # open song file
     df = pd.read_json(filepath, lines=True)
 
@@ -19,6 +25,12 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    """Extract data contained in a given file and load it into Postgres tables time, users and songplays.
+
+    Arguments:
+        cur {psycopg2.connection.cursor class}: A cursor to execute PostgreSQL commands during the lifetime of the connection
+        filepath {string}: The path to the file containing data to process    
+    """
     # open log file
     df = pd.read_json(filepath, lines=True)
 
@@ -52,6 +64,7 @@ def process_log_file(cur, filepath):
         
         if results:
             songid, artistid = results
+            print(songid, artistid)
         else:
             songid, artistid = None, None
 
@@ -61,6 +74,14 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+    """Call specified ETL function to extract data contained in a set of files and load it into related Postgres tables.
+
+    Arguments:
+        conn {psycopg2.connection class}: connection to Postgres instance that encapsulates a session
+        cur {psycopg2.connection.cursor class}: A cursor to execute PostgreSQL commands during the lifetime of the connection
+        filepath {string}: The path to the folder containing files to process   
+        func {function}: function to run to perform ETL on the given file
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
