@@ -531,3 +531,40 @@ What is a Data Warehouse?
 ![](./images/44.png)
 
 - Refer to `Lesson 4 Exercise 1`.
+
+**DWH Architecture**
+
+![](./images/45.png)
+![](./images/46.png)
+
+According to Kimball's Bus Architecture, data is kept in a common dimension data model shared across different departments. It does not allow for individual department specific data modeling requirements.
+
+![](./images/47.png)
+![](./images/48.png)
+
+Independent Data Marts are highly discouraged.
+
+![](./images/49.png)
+![](./images/50.png)
+
+- The Enterprise Data Warehouse provides a normalized data architecture before individual departments build on it. 
+- Corporate Information Factory (CIF) build on a 3NF normalized database and then allow for documented data denormalization for Data Marts. 
+- Corporate Information Factory (CIF) build on a 3NF normalized database and then allow for documented data denormalization for Data Marts.
+
+![](./images/51.png)
+![](./images/52.png)
+![](./images/53.png)
+![](./images/54.png)
+![](./images/55.png)
+![](./images/56.png)
+![](./images/57.png)
+
+**DWH Technologies**
+
+![](./images/58.png)
+
+- OLAP cubes is a very convenient way of slicing, dicing and drilling down.
+
+- How do serve these OLAP CUBES?
+1. Approach 1: Pre-aggregate the OLAP cubes and saves them on a special purpose non-relational database (**MOLAP**)
+2. Approach 2: Compute the OLAP cubes on the fly from the existing relational databases where the dimensioanal model redis (**ROLAP**)
