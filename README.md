@@ -568,3 +568,100 @@ Independent Data Marts are highly discouraged.
 - How do serve these OLAP CUBES?
 1. Approach 1: Pre-aggregate the OLAP cubes and saves them on a special purpose non-relational database (**MOLAP**)
 2. Approach 2: Compute the OLAP cubes on the fly from the existing relational databases where the dimensioanal model redis (**ROLAP**)
+
+### Lesson 2 - Introduction to Cloud Computing and AWS
+
+> Welcome to this lesson on Introduction to the Cloud and AWS. You'll learn about the cloud infrastructure ecosystem and understand how to use essential tools for computing, storage, and analytics through one of the biggest providers of cloud computing, Amazon Web Services.
+
+What Is **Cloud Computing**?
+Cloud computing: the practice of using a network of remote servers hosted on the Internet to store, manage, and process data, rather than a local server or a personal computer.
+
+The arrival of cloud computing completely changed the way we deploy our technology, providing powerful access to instant and scalable computing power to enterprises, startups, and developers alike. Whether you need servers to host a web application, reliable storage for your data, or machines to train machine learning models, it's easy to see the advantage of relying on the cloud rather than utilizing your personal computer or local servers.
+
+For one, you no longer have to invest in lots of hardware upfront. No need to worry about whether you are paying for more than you'll need or what to do if you need to scale a lot more later on. Cloud computing makes this as easy and clicking a few buttons to scale your resources up or down.
+
+It's significantly faster provisioning the resources you need through the cloud versus the time it would take to gather and build up the hardware you'd need to provide the same support. This allows you and your team, or company, to develop and experiment at a much faster rate.
+
+Lastly, you can provide efficient access to your applications around the world by spreading your deployments to multiple regions.
+
+**Amazon Web Services**
+Amazon Web Services is one of the largest providers in the cloud computing industry, with over 140 services in compute, storage, databases, networking, developer tools, security, and more. In this lesson, we'll learn about a few essential tools and services in AWS and practice using them. These services can be accessed in three different ways: the AWS Management Console, the Command Line Interface (CLI), or Software Development Kits (SDKs), which can be used in combination.
+
+We'll start with the AWS Management Console, which is the web user interface. The AWS CLI is a useful way to control and automate your services with code, and SDKs allow you to easily integrate services with your applications through APIs built around specific languages and platforms.
+
+**Using AWS Management Console**
+- Create an `IAM role` to attach to `Redshift cluster` to enable your cluster to load data from Amazon S3 buckets. Read more about IAM roles and Redshift [here](https://docs.aws.amazon.com/redshift/latest/gsg/rs-gsg-create-an-iam-role.html).
+- Create `security group` to be used to authorize access to your Redshift cluster.
+- Launch a Redshift cluster.
+- Create an `IAM User` to be used to access Redshift cluster with `AmazonRedshiftFullAccess` and `AmazonS3ReadOnlyAccess`. Download CSV with credentials.
+- Delete cluster to avoid unexpected costs.
+- Create an S3 bucket and upload file to it.
+- Create a PostgreSQL DB Instance using RDS.
+
+**Implementing DWH on AWS**
+
+> Students will be able to implement a data warehouse on AWS including scalable storage , ETL strategies, and design and query optimization. 
+
+![](./images/58.png)
+![](./images/59.png)
+![](./images/60.png)
+![](./images/61.png)
+![](./images/62.png)
+![](./images/63.png)
+![](./images/64.png)
+![](./images/65.png)
+![](./images/66.png)
+![](./images/67.png)
+![](./images/68.png)
+![](./images/69.png)
+![](./images/70.png)
+![](./images/71.png)
+![](./images/72.png)
+
+- The total number of nodes in a Redshift cluster is equal to: The number of AWS EC2 instances used in the cluster.
+- Each slice in a Redshift cluster is: At least 1 CPU with dedicated storage and memory for the slice.
+- If we have a Redshift cluster with 4 nodes, each containing 8 slices, i.e. the cluster collectively offers 32 slices. What is the maximum number of partitions per table? 32 partitions! The total number of slices in a cluster is our unit of parallelism and it is equal to the sum of all slices on the cluster.
+
+![](./images/73.png)
+![](./images/74.png)
+![](./images/75.png)
+![](./images/76.png)
+
+- ETL Servers talk to different databases and need to store data as it moves it from one place to the next. So they need to have large storage capacity!
+
+![](./images/77.png)
+
+- We store all the data in S3 buckets, we do not need storage on the EC2 machine. S3 offers a very reliable, scalable and worry-free storage solution, but it only offers storage not processing power.
+
+![](./images/78.png)
+
+- We can pre-aggregate data with OLAP cubes to feed BI apps and upload to S3. Redshift can also feed the BI apps directly though.
+- We need the staging bucket since we will most likely transform the data before inserting it into the DHW.
+
+![](./images/79.png)
+
+- Bulk insertion in a SQL database is faster than doing it record by record.
+
+- Why do we split a table into multiple files before ingestion? Because this way we can execute multiple simultaneous COPY commands. Each Redshift slice will act as a separate worker and will use ingest the split of a file in parallel, so the process will complete much faster.
+
+![](./images/80.png)
+![](./images/81.png)
+![](./images/82.png)
+![](./images/83.png)
+![](./images/84.png)
+
+- Usually you'll want to use S3 as a staging area, but for very small data, you might want to copy it directly from the EC2 machine.
+
+![](./images/85.png)
+![](./images/86.png)
+![](./images/87.png)
+![](./images/88.png)
+![](./images/89.png)
+![](./images/90.png)
+
+- Which of the following are advantages of Infrastructure-as-Code over creating infrastructure by clicking-around? Sharing, Reproducibility, Multiple Deployments & Maintainability are all advantages of IaC. One can track all the steps with others easily. One can be sure that no steps are forgotten. One can create a test environment identical to the production environment. If a change is needed, one can keep track of the changes by comparing the code.
+
+![](./images/91.png)
+![](./images/92.png)
+![](./images/93.png)
+![](./images/94.png)
