@@ -665,3 +665,23 @@ We'll start with the AWS Management Console, which is the web user interface. Th
 ![](./images/92.png)
 ![](./images/93.png)
 ![](./images/94.png)
+![](./images/95.png)
+![](./images/96.png)
+![](./images/97.png)
+
+- Joining 2 tables distributed using an EVEN strategy is slow because records will have to be shuffled for putting together the JOIN result. Yes, because e.g. a given key (say key=2532) of table 1 will not be on the same slice as the corresponding record in table 2, so record will be copied (shuffled) between slices on different nodes, which results in slow performance.
+
+![](./images/98.png)
+![](./images/99.png)
+
+Note: In general, dimension tables are small compared to fact tables.
+
+![](./images/100.png)
+![](./images/101.png)
+![](./images/102.png)
+![](./images/103.png)
+![](./images/104.png)
+![](./images/105.png)
+![](./images/106.png)
+![](./images/107.png)
+![](./images/108.png)
