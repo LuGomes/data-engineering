@@ -850,3 +850,20 @@ For example, you might hear about newer database storage systems like HBase or C
 
 #### Lesson 2 - Data Wrangling with Spark
 
+- Spark is written in a functional programming language called Scala. There are, however, interfaces in Java, R and Python (PySpark). There is still some things about functional programming that we need to work with like the summing of records we saw at the example before. In procedural programming we would keep track of a counter variable instead.
+
+![](./images/120.png)
+
+- Why use functional programming? Because it's perfect for distributed systems. "You know your system is distributed when your own computer crashes because someone you didn't even knew about made a mistake". Functional programming helps minimize these sort of mistakes. Functions are somewhat more strict in functional programming than in average python...
+
+- The PySpark API allows you to write programs in Spark and ensures that your code uses functional programming practices. Underneath the hood, the Python code uses py4j to make calls to the Java Virtual Machine (JVM).
+
+**Pure functions**
+
+- In distributed systems, your functions should NOT have side effects into variables running outside of their scopes since this could interfere with other functions running on your cluster. Your original inputs could also get contaminated otherwise. In distributed systems, the function inputs cannot be altered in the process of running the processes. So pure functions preserve their inputs and have no side effects!
+
+- The input data is copied and **immutable**. In order for a big function to be pure, its sub-functions also need to be pure. But the sub-functions' inputs do not need to be copied, since **lazy evaluation** is used. Before starting calculations, Sparks build a so-called **Directed Cyclic Graph** (DAG) which is a recipe of sorts of all to be done with the input data. Then it checks if it can wait to the last moment to get the data.
+
+![](./images/121.png)
+
+- Data formats: CSV, JSON, HTML and XML (extensible markup language is a generalized version of HTML where the tags do not have a specific meaning).
