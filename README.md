@@ -847,3 +847,6 @@ Keep in mind that Spark is not a data storage system, and there are a number of 
 Sometimes it makes sense to use the power and simplicity of SQL on big data. For these cases, a new class of databases, know as NoSQL and NewSQL, have been developed.
 
 For example, you might hear about newer database storage systems like HBase or Cassandra. There are also distributed SQL engines like Impala and Presto. Many of these technologies use query syntax that you are likely already familiar with based on your experiences with Python and SQL.
+
+#### Lesson 2 - Data Wrangling with Spark
+
