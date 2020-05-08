@@ -685,3 +685,65 @@ Note: In general, dimension tables are small compared to fact tables.
 ![](./images/106.png)
 ![](./images/107.png)
 ![](./images/108.png)
+
+### Section 4 - Data Lakes with Spark
+
+#### Lesson 1 - The Power of Spark
+
+Spark is currently one of the most popular tools for big data analytics. You might have heard of other tools such as Hadoop. Hadoop is a slightly older technology although still in use by some companies. Spark is generally faster than Hadoop, which is why Spark has become more popular over the last few years.
+
+There are many other big data tools and systems, each with its own use case. For example, there are database system like Apache Cassandra and SQL query engines like Presto. But Spark is still one of the most popular tools for analyzing large data sets.
+
+Here is an outline of the topics we are covering in this lesson:
+
+- What is big data?
+- Review of the hardware behind big data
+- Introduction to distributed systems
+- Brief history of Spark and big data
+- Common Spark use cases
+- Other technologies in the big data ecosystem
+
+![](./images/109.png)
+
+**The Numbers Everyone Should Know**
+- How long does it take for your CPU to add two numbers?
+- How quickly can you look up an appointment if your calendar is already chached in your computer's memory?
+- How many seconds does it take to load up your favourite song from your laptop's SSD storage?
+- How much data can you download from Netflix in a minute?
+
+![](./images/110.png)
+
+In the next few videos, you'll learn about four key hardware components. Understanding these components helps determine whether you are working on a "big data" problem or if it's easier to analyze the data locally on your own computer.
+
+**CPU (Central Processing Unit)**
+The CPU is the "brain" of the computer. Every process on your computer is eventually handled by your CPU. This includes calculations and also instructions for the other components of the compute.
+
+**Memory (RAM)**
+When your program runs, data gets temporarily stored in memory before getting sent to the CPU. Memory is ephemeral storage - when your computer shuts down, the data in the memory is lost.
+
+**Storage (SSD or Magnetic Disk)**
+Storage is used for keeping data over long periods of time. When a program runs, the CPU will direct the memory to temporarily load data from long-term storage.
+
+**Network (LAN or the Internet)**
+Network is the gateway for anything that you need that isn't stored on your computer. The network could connect to other computers in the same room (a Local Area Network) or to a computer on the other side of the world, connected over the internet.
+
+Other Numbers to Know?
+You may have noticed a few other numbers involving the L1 and L2 Cache, mutex locking, and branch mispredicts. While these concepts are important for a detailed understanding of what's going on inside your computer, you don't need to worry about them for this course.
+
+![](./images/111.png)
+
+CPU operations are fastest. Operations in memory (RAM) are the second fastest. Then comes hard disk storage and finally transferring data across a network. Keep these relative speeds in mind. They'll help you understand the constraints when working with big data.
+
+The CPU is the brains of a computer. The CPU has a few different functions including directing other components of a computer as well as running mathematical calculations. The CPU can also store small amounts of data inside itself in what are called registers. These registers hold data that the CPU is working with at the moment.
+
+For example, say you write a program that reads in a 40 MB data file and then analyzes the file. When you execute the code, the instructions are loaded into the CPU. The CPU then instructs the computer to take the 40 MB from disk and store the data in memory (RAM). If you want to sum a column of data, then the CPU will essentially take two numbers at a time and sum them together. The accumulation of the sum needs to be stored somewhere while the CPU grabs the next number.
+
+This cumulative sum will be stored in a register. The registers make computations more efficient: the registers avoid having to send data unnecessarily back and forth between memory (RAM) and the CPU.
+
+![](./images/112.png)
+![](./images/113.png)
+
+- Ex: No problem for a single machine to process one day of worldwide tweets.
+
+![](./images/114.png)
+![](./images/115.png)
