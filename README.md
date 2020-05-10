@@ -960,3 +960,35 @@ Spark’s query optimizer is called Catalyst. While Catalyst is a powerful tool 
 It also can’t decide for you how much data you’re shuffling across the cluster. Remember from the first lesson how expensive sending data through the network is. As much as possible try to avoid shuffling unnecessary data. In practice, this means that you need to perform joins and grouped aggregations as late as possible.
 
 When it comes to joins there is more than one strategy to choose from. If one of your data frames are small consider using broadcast hash join instead of a hash join.
+
+#### Lesson 4 - Intro to Data Lakes
+
+> Students will be able to understand the need for a data lake, how it is different from a data warehouse and the various options for implementing it on AWS.
+
+Q: Is there anything wrong with the data warehouse that we need something different?
+
+A: No, data warehousing is a rather mature field with lots of cumulative experience over the years, tried-and-true technologies. Dimensional modeling is still extremely relevant to this day. For most organizations, a data warehouse is still the best way to go, perhaps the biggest change would be going from an on-remise deployment to a cloud deployment.
+
+![](./images/125.png)
+![](./images/126.png)
+![](./images/127.png)
+![](./images/128.png)
+![](./images/129.png)
+![](./images/130.png)
+![](./images/131.png)
+![](./images/132.png)
+![](./images/133.png)
+![](./images/134.png)
+![](./images/135.png)
+![](./images/136.png)
+![](./images/137.png)
+![](./images/138.png)
+![](./images/139.png)
+![](./images/140.png)
+![](./images/141.png)
+![](./images/142.png)
+![](./images/143.png)
+![](./images/144.png)
+![](./images/145.png)
+![](./images/146.png)
+![](./images/147.png)
