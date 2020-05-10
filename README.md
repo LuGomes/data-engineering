@@ -908,3 +908,55 @@ Window functions are a way of combining the values of ranges of rows in a DataFr
 - Spark's Query optimizer (Catalyst) turns your query into an execution plan (DAG) so there is not much difference between using SQL or dataframes to perform data wrangling in Spark. 
 
 - RDDs are a low-level abstraction of the data. In the first version of Spark, you worked directly with RDDs. You can think of RDDs as long lists distributed across various machines. You can still use RDDs as part of your Spark code although data frames and SQL are easier.
+
+#### Lesson 3 - Debugging and Optimization
+
+- From Local Mode to Cluster Mode:
+    - Standalone mode
+    - MESOS - share across team
+    - YARN - share across team
+- Ww will use AWS S3 and EC2, when we log in data will be pulled from S3 and spread across the cluster to be computed by the various nodes.
+- AWS Elastic Map Reduce (EMR) that provides EC2 instances with Spark/Hadoop and other Big data tools already installed and configured.
+- He created a Key Pair and download a .pem file onto the local machine. To prevent other users from reading,  writing or executing this key file, he run `chmod og-rwx <pem-filepath>`. AWS puts the other part of the key pair in the cluster and this ensures connection of local computer to cluster. Then created a new cluster on EMR. Then created notebooks which are stored separately from the cluster. To enable the built-in WebUI feature, we need a proxy to connect to the cluster. He added a browser extension and imported the xml file with contents given by AWS. Then he created a tunnel from the terminal to redirect traffic from our local machine to the cluster.
+- For automated jobs, python scripts are preferred to Jupyter notebooks. `spark-submit` to submit the script to EMR.
+- Instead of using S3 to store data, we can use HDFS installed in the cluster. 
+- Spark accumulator to allow for debugging since we are accessing the master node, and not the worker nodes. The accumulator is a global variable of sorts in the master node.
+- Spark WebUI shows cluster configuration, the DAG broken up into tasks related to jobs that are running. Port 8080 is the default.
+- **Data skew**: workers get very different workloads depending on the data input. **Pareto principle**: 80% of your data comes from 20% of your users. To solve, we can change up the way we divide the workload between nodes. Or partition into smaller pieces.
+- Big O complexity can also be tricky with Big Data.
+
+![](./images/124.png)
+
+Troubleshooting Other Spark Issues
+In this lesson, we walked through various examples of Spark issues you can debug based on error messages, loglines and stack traces.
+
+We have also touched on another very common issue with Spark jobs that can be harder to address: everything working fine but just taking a very long time. So what do you do when your Spark job is (too) slow?
+
+**Insufficient resources**
+
+Often while there are some possible ways of improvement, processing large data sets just takes a lot longer time than smaller ones even without any big problem in the code or job tuning. Using more resources, either by increasing the number of executors or using more powerful machines, might just not be possible. When you have a slow job it’s useful to understand:
+
+How much data you’re actually processing (compressed file formats can be tricky to interpret). If you can decrease the amount of data to be processed by filtering or aggregating to lower cardinality. And if resource utilization is reasonable.
+
+There are many cases where different stages of a Spark job differ greatly in their resource needs: loading data is typically I/O heavy, some stages might require a lot of memory, others might need a lot of CPU. Understanding these differences might help to optimize the overall performance. Use the Spark UI and logs to collect information on these metrics.
+
+If you run into out of memory errors you might consider increasing the number of partitions. If the memory errors occur over time you can look into why the size of certain objects is increasing too much during the run and if the size can be contained. Also, look for ways of freeing up resources if garbage collection metrics are high.
+
+Certain algorithms (especially ML ones) use the driver to store data the workers share and update during the run. If you see memory issues on the driver check if the algorithm you’re using is pushing too much data there.
+
+**Data skew**
+If you drill down in the Spark UI to the task level you can see if certain partitions process significantly more data than others and if they are lagging behind. Such symptoms usually indicate a skewed data set. Consider implementing the techniques mentioned in this lesson:
+
+Add an intermediate data processing step with an alternative key. Adjust the spark.sql.shuffle.partitions parameter if necessary.
+
+The problem with data skew is that it’s very specific to a dataset. You might know ahead of time that certain customers or accounts are expected to generate a lot more activity but the solution for dealing with the skew might strongly depend on how the data looks like. If you need to implement a more general solution (for example for an automated pipeline) it’s recommended to take a more conservative approach (so assume that your data will be skewed) and then monitor how bad the skew really is.
+
+**Inefficient queries**
+
+Once your Spark application works it’s worth spending some time to analyze the query it runs. You can use the Spark UI to check the DAG and the jobs and stages it’s built of.
+
+Spark’s query optimizer is called Catalyst. While Catalyst is a powerful tool to turn Python code to an optimized query plan that can run on the JVM it has some limitations when optimizing your code. It will for example push filters in a particular stage as early as possible in the plan but won’t move a filter across stages. It’s your job to make sure that if early filtering is possible without compromising the business logic than you perform this filtering where it’s more appropriate.
+
+It also can’t decide for you how much data you’re shuffling across the cluster. Remember from the first lesson how expensive sending data through the network is. As much as possible try to avoid shuffling unnecessary data. In practice, this means that you need to perform joins and grouped aggregations as late as possible.
+
+When it comes to joins there is more than one strategy to choose from. If one of your data frames are small consider using broadcast hash join instead of a hash join.
