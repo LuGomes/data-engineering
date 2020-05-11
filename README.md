@@ -992,3 +992,138 @@ A: No, data warehousing is a rather mature field with lots of cumulative experie
 ![](./images/145.png)
 ![](./images/146.png)
 ![](./images/147.png)
+
+### Section 5 - Data Pipelines with Airflow
+
+#### Lesson 1 - Data Pipelines
+
+Examples of real world data pipelines:
+- Automated marketing emails
+- Real-time pricing in rideshare apps
+- Targeted advertising based on browsing history
+
+> A series of steps in which data is processed. Often on schedules but also external triggers and events.  It's typically using either ETL or ELT.
+
+- Some data pipelines may perform only a subset of ETL or ELT.
+
+![](./images/148.png)
+
+**Extract Transform Load (ETL) and Extract Load Transform (ELT)**
+"ETL is normally a continuous, ongoing process with a well-defined workflow. ETL first extracts data from homogeneous or heterogeneous data sources. Then, data is cleansed, enriched, transformed, and stored either back in the lake or in a data warehouse.
+
+"ELT (Extract, Load, Transform) is a variant of ETL wherein the extracted data is first loaded into the target system. Transformations are performed after the data is loaded into the data warehouse. ELT typically works well when the target system is powerful enough to handle transformations. Analytical databases like Amazon Redshift and Google BigQ."
+
+What is Kafka?
+"Apache Kafka is an open-source stream-processing software platform developed by LinkedIn and donated to the Apache Software Foundation, written in Scala and Java. The project aims to provide a unified, high-throughput, low-latency platform for handling real-time data feeds. Its storage layer is essentially a massively scalable pub/sub message queue designed as a distributed transaction log, making it highly valuable for enterprise infrastructures to process streaming data."
+
+What is RedShift?
+"Amazon Redshift is a fully managed, petabyte-scale data warehouse service in the cloud. You can start with just a few hundred gigabytes of data and scale to a petabyte or more... The first step to create a data warehouse is to launch a set of nodes, called an Amazon Redshift cluster. After you provision your cluster, you can upload your data set and then perform data analysis queries. Regardless of the size of the data set, Amazon Redshift offers fast query performance using the same SQL-based tools and business intelligence applications that you use today.
+
+**Data Validation**
+> The process of ensuring the data is present, correct and meaningful. Ensuring the quality of the data through automated validation checks is a critical step in building data pipelines at any organization. 
+
+**DAGs**
+![](./images/149.png)
+![](./images/150.png)
+
+- In ETL, each step of the process typically depends on the last. Each step is a node and the dependencies on the prior steps are directed edges.
+
+**Directed Acyclic Graphs (DAGs)**: DAGs are a special subset of graphs in which the edges between nodes have a specific direction, and no cycles exist. When we say “no cycles exist” what we mean is the nodes cant create a path back to themselves.
+**Nodes**: A step in the data pipeline process.
+**Edges**: The dependencies or relationships other between nodes.
+
+- Are there real world cases where a data pipeline is not DAG?
+
+It is possible to model a data pipeline that is not a DAG, meaning that it contains a cycle within the process. However, the vast majority of use cases for data pipelines can be described as a directed acyclic graph (DAG). This makes the code more understandable and maintainable.
+
+- Can we have two different pipelines for the same data and can we merge them back together?
+
+Yes. It's not uncommon for a data pipeline to take the same dataset, perform two different processes to analyze the it, then merge the results of those two processes back together.
+
+**Apache Airflow**
+
+> "Airflow is a platform to programmatically author, schedule and monitor workflows. Use airflow to author workflows as directed acyclic graphs (DAGs) of tasks. The airflow scheduler executes your tasks on an array of workers while following the specified dependencies. Rich command line utilities make performing complex surgeries on DAGs a snap. The rich user interface makes it easy to visualize pipelines running in production, monitor progress, and troubleshoot issues when needed. When workflows are defined as code, they become more maintainable, versionable, testable, and collaborative."
+Apache Airflow was open-sourced in 2015 by Airbnb. 
+
+![](./images/151.png)
+![](./images/152.png)
+
+What makes up Airflow:
+![](./images/153.png)
+![](./images/154.png)
+![](./images/155.png)
+![](./images/156.png)
+![](./images/157.png)
+![](./images/158.png)
+
+- **Scheduler** orchestrates the execution of jobs on a trigger or schedule. The Scheduler chooses how to prioritize the running and execution of tasks within the system. 
+- **Work Queue** is used by the scheduler in most Airflow installations to deliver tasks that need to be run to the Workers.
+- **Worker** processes execute the operations defined in each DAG. In most Airflow installations, workers pull from the work queue when it is ready to process a task. When the worker completes the execution of the task, it will attempt to process more work from the work queue until there is no further work remaining. When work in the queue arrives, the worker will begin to process it.
+- **Database** saves credentials, connections, history, and configuration. The database, often referred to as the metadata database, also stores the state of all tasks in the system. Airflow components interact with the database with the Python ORM, SQLAlchemy.
+- Web Interface provides a control dashboard for users and maintainers. Throughout this course you will see how the web interface allows users to perform tasks such as stopping and starting DAGs, retrying failed tasks, configuring credentials, The web interface is built using the Flask web-development microframework.
+
+**Order of Operations For an Airflow DAG**
+- The Airflow Scheduler starts DAGs based on time or external triggers.
+- Once a DAG is started, the Scheduler looks at the steps within the DAG and determines which steps can run by looking at their dependencies.
+- The Scheduler places runnable steps in the queue.
+- Workers pick up those tasks and run them.
+- Once the worker has finished running the step, the final status of the task is recorded and additional tasks are placed by the scheduler until all tasks are complete.
+- Once all tasks have been completed, the DAG is complete.
+
+![](./images/159.png)
+![](./images/160.png)
+![](./images/161.png)
+
+Start Date: If your start date is in the past, Airflow will run your DAG as many times as there are schedule intervals between that start date and the current date.
+
+End Date: Unless you specify an optional end date, Airflow will continue to run your DAGs until you disable or delete the DAG.
+
+**Operators**
+Operators define the atomic steps of work that make up a DAG. Airflow comes with many Operators that can perform common operations. Here are a handful of common ones:
+
+- PythonOperator
+- PostgresOperator
+- RedshiftToS3Operator
+- S3ToRedshiftOperator
+- BashOperator
+- SimpleHttpOperator
+- Sensor
+
+![](./images/162.png)
+
+Task Dependencies
+In Airflow DAGs:
+
+Nodes = Tasks
+Edges = Ordering and dependencies between tasks
+**Task dependencies** can be described programmatically in Airflow using `>>` and `<<`
+
+`a >> b` means a comes before b
+`a << b` means a comes after b
+
+![](./images/163.png)
+![](./images/164.png)
+
+- Connection can be accessed via **hooks**.
+- You don't have to worry about how and where to store these connection strings and secrets in your code.
+- We will use `PostgresHook` to interact with Redshift.
+
+![](./images/165.png)
+
+Airflow comes with many Hooks that can integrate with common systems. Here are a few common ones:
+
+- HttpHook
+- PostgresHook (works with RedShift)
+- MySqlHook
+- SlackHook
+- PrestoHook
+
+![](./images/166.png)
+
+- Admin tab in the AriflowUI to create variables and connections. Use AWS access key and secret key from AWS to connect to AWS.
+
+![](./images/167.png)
+
+- [Here](https://airflow.apache.org/docs/stable/macros-ref) is the Apache Airflow documentation on context variables that can be included as kwargs.
+
+![](./images/168.png)
