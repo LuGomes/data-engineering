@@ -1,0 +1,13 @@
+version: '3'
+services:
+  airflow-app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./requirements.txt:/requirements.txt
+      - ./dags:/dags
+      - ./plugins:/plugins
+    stdin_open: true

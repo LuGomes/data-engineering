@@ -1,0 +1,44 @@
+Visits
+-
+visit_id PK INT4
+year INT2
+month INT2
+airport_code VARCHAR FK >- Airports.airport_code
+arrival_date DATE
+arrival_mode VARCHAR
+state_code VARCHAR FK >- Cities.state_code
+departure_date DATE
+visitor_id INT8 FK >- Visitors.visitor_id
+
+
+Visitors
+-
+visitor_id PK INT8
+citizenship INT2 
+residency INT2 FK
+age INT4
+gender VARCHAR
+visa_category VARCHAR
+visa_type VARCHAR
+
+
+Airports 
+-
+airport_code PK VARCHAR
+city VARCHAR FK >- Cities.city
+type VARCHAR
+
+Cities
+-
+city PK VARCHAR
+state_name VARCHAR
+avg_house_size INT2
+state_code VARCHAR
+race VARCHAR
+median_age INT2,
+male_pop INT4
+female_pop INT4
+total_pop INT4
+veteran_pop INT4
+foreign_born_pop INT4
+race_count INT4  
